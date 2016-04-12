@@ -1,0 +1,58 @@
+<html>
+	<head>
+  		<title>Report</title>
+	</head>
+	<body>
+		<img src="PieChart.jpeg" alt="TestResults" style="width:640px;height:480px;">
+		<table border="1">
+  			<tr>
+    			<th>num</th>
+    			<th>supplierId</th>
+    			<th>gender</th>
+    			<th>healthClass</th>
+    			<th>term</th>
+    			<th>faceAmount</th>
+    			<th>waiver</th>
+    			<th>waiverRating</th>
+    			<th>cr</th>
+    			<th>cru</th>
+    			<th>termAccel</th>
+    			<th>lifeElements</th>
+    			<th>commonTable</th>
+    			<th>flatExtra</th>
+    			<th>flatYears</th>
+    			<th>actualAge</th>
+    			<th>paymentOption</th>
+    			<th>mode</th>
+    			<th>premium</th>
+    			<th>state</th>
+    			<th>status</th>
+  			</tr>
+			<#list tests as test>
+  				<tr <#if test.status == "true" || test.status == "TRUE">bgcolor="green"<#elseif test.status == "false" || test.status == "FALSE">bgcolor="red"<#elseif test.status == "n/a" || test.status == "N/A">bgcolor="blue"</#if>>
+  					<td>${test.num}</td>
+  					<td>${test.supplierId}</td>
+  					<td>${test.gender}</td>
+  					<td>${test.healthClass}</td>
+  					<td>${test.term}</td>
+  					<td>${test.faceAmount}</td>
+  					<td>${test.waiver}</td>
+  					<td>${test.waiverRating}</td>
+  					<td>${test.cr}</td>
+  					<td>${test.cru}</td>
+  					<td>${test.termAccel}</td>
+  					<td>${test.lifeElements}</td>
+  					<td>${test.commonTable}</td>
+  					<td>${test.flatExtra}</td>
+  					<td>${test.flatYears}</td>
+  					<td>${test.actualAge}</td>
+  					<td>${test.paymentOption}</td>
+  					<td>${test.mode}</td>
+  					<td>${test.premium}</td>
+  					<td>${test.state}</td>
+  					<td>${test.status}</td>
+  				</tr>
+			</#list>
+		</table>
+	</body>
+</html>

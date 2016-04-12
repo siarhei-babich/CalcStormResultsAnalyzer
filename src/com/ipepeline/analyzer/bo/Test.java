@@ -1,4 +1,4 @@
-package com.ipepeline.analyzer;
+package com.ipepeline.analyzer.bo;
 
 public class Test {
     
@@ -22,6 +22,7 @@ public class Test {
     private String mode;
     private String premium;
     private String state;
+    private String status;
     
     public Test() {
 	super();
@@ -30,7 +31,7 @@ public class Test {
     public Test(String num, String supplierId, String gender, String healthClass, String term, String faceAmount,
 	    String waiver, String waiverRating, String cr, String cru, String termAccel, String lifeElements,
 	    String commonTable, String flatExtra, String flatYears, String actualAge, String paymentOption, String mode,
-	    String premium, String state) {
+	    String premium, String state, String status) {
 	super();
 	this.num = num;
 	this.supplierId = supplierId;
@@ -52,6 +53,7 @@ public class Test {
 	this.mode = mode;
 	this.premium = premium;
 	this.state = state;
+	this.status = status;
     }
 
     public String getNum() {
@@ -214,6 +216,14 @@ public class Test {
         this.state = state;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
 	return "Test [num=" + num + ", supplierId=" + supplierId + ", gender=" + gender + ", healthClass=" + healthClass
@@ -221,7 +231,7 @@ public class Test {
 		+ waiverRating + ", cr=" + cr + ", cru=" + cru + ", termAccel=" + termAccel + ", lifeElements="
 		+ lifeElements + ", commonTable=" + commonTable + ", flatExtra=" + flatExtra + ", flatYears="
 		+ flatYears + ", actualAge=" + actualAge + ", paymentOption=" + paymentOption + ", mode=" + mode
-		+ ", premium=" + premium + ", state=" + state + "]";
+		+ ", premium=" + premium + ", state=" + state + ", status=" + status + "]";
     }
     
 }
