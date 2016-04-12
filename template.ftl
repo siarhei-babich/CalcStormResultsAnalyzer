@@ -29,7 +29,7 @@
     			<th>status</th>
   			</tr>
 			<#list tests as test>
-  				<tr <#if test.status == "true" || test.status == "TRUE">bgcolor="green"<#elseif test.status == "false" || test.status == "FALSE">bgcolor="red"<#elseif test.status == "n/a" || test.status == "N/A">bgcolor="blue"</#if>>
+  				<tr <#if test.status == "true" || test.status == "TRUE">bgcolor="#d3ffce"<#elseif test.status == "false" || test.status == "FALSE">bgcolor="#ffc0cb"<#elseif test.status == "n/a" || test.status == "N/A">bgcolor="#b0e0e6"</#if>>
   					<td>${test.num}</td>
   					<td>${test.supplierId}</td>
   					<td>${test.gender}</td>

@@ -210,9 +210,10 @@ public class Runner {
 		true,
 		false);
 	PiePlot plot = (PiePlot) chart.getPlot();
-	plot.setSectionPaint("Passed", Color.green);
-	plot.setSectionPaint("Failed", Color.red);
-	plot.setSectionPaint("N/A", Color.blue);
+	plot.setBackgroundPaint(Color.white);
+	plot.setSectionPaint("Passed", new Color(211, 255, 206));
+	plot.setSectionPaint("Failed", new Color(255, 192, 203));
+	plot.setSectionPaint("N/A", new Color(176, 224, 230));
 	plot.setSimpleLabels(true);
 	
 	PieSectionLabelGenerator gen = new StandardPieSectionLabelGenerator("{0}: {1} ({2})", new DecimalFormat("0"), new DecimalFormat("0%"));
