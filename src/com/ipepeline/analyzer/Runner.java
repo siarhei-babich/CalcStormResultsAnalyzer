@@ -26,7 +26,7 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
 import com.ipepeline.analyzer.bo.Test;
-import com.ipepeline.analyzer.bo.TestStatus;
+import com.ipepeline.analyzer.bo.TestResult;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -36,7 +36,7 @@ import freemarker.template.TemplateExceptionHandler;
 public class Runner {
     
     private ArrayList<Test> tests;
-    private ArrayList<TestStatus> testStatuses;
+    private ArrayList<TestResult> testResults;
     
     private Properties properties;
     
@@ -48,7 +48,7 @@ public class Runner {
 	runner.getProperties();
 	runner.getTests();
 	runner.getTestStatuses();
-	runner.setTestStatuses();
+	runner.setTestResults();
 	runner.createPieChart();
 	runner.createHTML();
     }
@@ -132,7 +132,7 @@ public class Runner {
 	BufferedReader br = null;
 	String line = "";
 	String cvsSplitBy = ",";
-	testStatuses = new ArrayList<TestStatus>();
+	testResults = new ArrayList<TestResult>();
 	try {
 	    br = new BufferedReader(new FileReader(csvFile));
 	    while ((line = br.readLine()) != null) {
@@ -142,10 +142,9 @@ public class Runner {
 		    if(testStatusRow[4].equals("no_rates")) {
 			success = "n/a";
 		    }
-		    testStatuses.add(new TestStatus(testStatusRow[2], success));
+		    testResults.add(new TestResult(testStatusRow[2], testStatusRow[4], success));
 		}
 	    }
-
 	} catch (FileNotFoundException e) {
 	    e.printStackTrace();
 	} catch (IOException e) {
@@ -161,10 +160,11 @@ public class Runner {
 	}
     }
     
-    public void setTestStatuses() {
-	if(tests.size() == testStatuses.size()) {
+    public void setTestResults() {
+	if(tests.size() == testResults.size()) {
 	    for (int i = 0; i < tests.size(); i++) {
-		tests.get(i).setStatus(testStatuses.get(i).getStatus());
+		tests.get(i).setStatus(testResults.get(i).getStatus());
+		tests.get(i).setActualResult(testResults.get(i).getResponseMessage());
 	    }
 	} else {
 	    System.out.println("Unexpected number of test statuses!");

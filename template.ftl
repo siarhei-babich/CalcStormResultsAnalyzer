@@ -25,6 +25,7 @@
     			<th>paymentOption</th>
     			<th>mode</th>
     			<th>premium</th>
+    			<th>actualResult</th>
     			<th>state</th>
     			<th>status</th>
   			</tr>
@@ -49,6 +50,7 @@
   					<td>${test.paymentOption}</td>
   					<td>${test.mode}</td>
   					<td>${test.premium}</td>
+  					<td>${test.actualResult}</td>
   					<td>${test.state}</td>
   					<td>${test.status}</td>
   				</tr>

@@ -21,6 +21,7 @@ public class Test {
     private String paymentOption;
     private String mode;
     private String premium;
+    private String actualResult;
     private String state;
     private String status;
     
@@ -31,7 +32,7 @@ public class Test {
     public Test(String num, String supplierId, String gender, String healthClass, String term, String faceAmount,
 	    String waiver, String waiverRating, String cr, String cru, String termAccel, String lifeElements,
 	    String commonTable, String flatExtra, String flatYears, String actualAge, String paymentOption, String mode,
-	    String premium, String state, String status) {
+	    String premium, String actualResult, String state, String status) {
 	super();
 	this.num = num;
 	this.supplierId = supplierId;
@@ -52,6 +53,7 @@ public class Test {
 	this.paymentOption = paymentOption;
 	this.mode = mode;
 	this.premium = premium;
+	this.actualResult = actualResult;
 	this.state = state;
 	this.status = status;
     }
@@ -208,6 +210,14 @@ public class Test {
         this.premium = premium;
     }
 
+    public String getActualResult() {
+        return actualResult;
+    }
+
+    public void setActualResult(String actualResult) {
+        this.actualResult = actualResult;
+    }
+
     public String getState() {
         return state;
     }
@@ -231,7 +241,8 @@ public class Test {
 		+ waiverRating + ", cr=" + cr + ", cru=" + cru + ", termAccel=" + termAccel + ", lifeElements="
 		+ lifeElements + ", commonTable=" + commonTable + ", flatExtra=" + flatExtra + ", flatYears="
 		+ flatYears + ", actualAge=" + actualAge + ", paymentOption=" + paymentOption + ", mode=" + mode
-		+ ", premium=" + premium + ", state=" + state + ", status=" + status + "]";
+		+ ", premium=" + premium + ", actualResult=" + actualResult + ", state=" + state + ", status=" + status
+		+ "]";
     }
     
 }
