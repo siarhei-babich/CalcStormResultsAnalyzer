@@ -1,48 +1,48 @@
 package com.ipepeline.analyzer.bo;
 
 public class TestResult {
-    
-    private String label;
-    private String responseMessage;
-    private String status;
-    
-    public TestResult() {
-    }
 
-    public TestResult(String label, String responseMessage, String status) {
-	super();
-	this.label = label;
-	this.responseMessage = responseMessage;
-	this.status = status;
-    }
+	private String label;
+	private String responseMessage;
+	private String status;
 
-    public String getLabel() {
-        return label;
-    }
+	public TestResult() {
+	}
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+	public TestResult(String label, String responseMessage, String status) {
+		super();
+		this.label = label;
+		this.responseMessage = responseMessage;
+		this.status = status;
+	}
 
-    public String getResponseMessage() {
-        return responseMessage;
-    }
+	public String getLabel() {
+		return label;
+	}
 
-    public void setResponseMessage(String responseMessage) {
-        this.responseMessage = responseMessage;
-    }
-    
-    public String getStatus() {
-        return status;
-    }
+	public void setLabel(String label) {
+		this.label = label;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public String getResponseMessage() {
+		return responseMessage;
+	}
 
-    @Override
-    public String toString() {
-	return "TestStatus [label=" + label + ", status=" + status + ", responseMessage=" + responseMessage + "]";
-    }
+	public void setResponseMessage(String responseMessage) {
+		this.responseMessage = responseMessage;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "TestStatus [label=" + label + ", status=" + status + ", responseMessage=" + responseMessage + "]";
+	}
 
 }
