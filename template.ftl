@@ -3,57 +3,22 @@
   		<title>Report</title>
 	</head>
 	<body>
-		<img src="PieChart.jpeg" alt="TestResults" style="width:640px;height:480px;">
+		<img src="PieChart.jpeg" alt="TestResults" style="width:640px;height:480px;" />
+		<br />
 		<table border="1">
-  			<tr>
-    			<th>num</th>
-    			<th>supplierId</th>
-    			<th>gender</th>
-    			<th>healthClass</th>
-    			<th>term</th>
-    			<th>faceAmount</th>
-    			<th>waiver</th>
-    			<th>waiverRating</th>
-    			<th>cr</th>
-    			<th>cru</th>
-    			<th>termAccel</th>
-    			<th>lifeElements</th>
-    			<th>commonTable</th>
-    			<th>flatExtra</th>
-    			<th>flatYears</th>
-    			<th>actualAge</th>
-    			<th>paymentOption</th>
-    			<th>mode</th>
-    			<th>premium</th>
-    			<th>actualResult</th>
-    			<th>state</th>
-    			<th>status</th>
-  			</tr>
-			<#list tests as test>
-  				<tr <#if test.status == "true" || test.status == "TRUE">bgcolor="#d3ffce"<#elseif test.status == "false" || test.status == "FALSE">bgcolor="#ffc0cb"<#elseif test.status == "n/a" || test.status == "N/A">bgcolor="#b0e0e6"</#if>>
-  					<td>${test.num}</td>
-  					<td>${test.supplierId}</td>
-  					<td>${test.gender}</td>
-  					<td>${test.healthClass}</td>
-  					<td>${test.term}</td>
-  					<td>${test.faceAmount}</td>
-  					<td>${test.waiver}</td>
-  					<td>${test.waiverRating}</td>
-  					<td>${test.cr}</td>
-  					<td>${test.cru}</td>
-  					<td>${test.termAccel}</td>
-  					<td>${test.lifeElements}</td>
-  					<td>${test.commonTable}</td>
-  					<td>${test.flatExtra}</td>
-  					<td>${test.flatYears}</td>
-  					<td>${test.actualAge}</td>
-  					<td>${test.paymentOption}</td>
-  					<td>${test.mode}</td>
-  					<td>${test.premium}</td>
-  					<td>${test.actualResult}</td>
-  					<td>${test.state}</td>
-  					<td>${test.status}</td>
-  				</tr>
+  			<#list headers as header>
+				<tr>
+					<#list header as string>
+  						<th>${string}</th>
+    				</#list>
+				</tr>
+			</#list>
+  			<#list rows as row>
+				<tr <#if row?last == "passed" || row?last == "PASSED">bgcolor="#d3ffce"<#elseif row?last == "failed" || row?last == "FAILED">bgcolor="#ffc0cb"<#elseif row?last == "n/a" || row?last == "N/A">bgcolor="#b0e0e6"</#if>>
+					<#list row as string>
+  						<td>${string}</td>
+    				</#list>
+				</tr>
 			</#list>
 		</table>
 	</body>

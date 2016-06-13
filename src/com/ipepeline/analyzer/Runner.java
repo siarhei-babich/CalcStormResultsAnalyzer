@@ -12,11 +12,11 @@ import java.io.InputStream;
 import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -25,8 +25,7 @@ import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
-import com.ipepeline.analyzer.bo.Test;
-import com.ipepeline.analyzer.bo.TestResult;
+import com.ipepeline.analyzer.bo.ReportLine;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -35,8 +34,11 @@ import freemarker.template.TemplateExceptionHandler;
 
 public class Runner {
 
-	private ArrayList<Test> tests;
-	private ArrayList<TestResult> testResults;
+	private ArrayList<ArrayList<String>> testDataTable = new ArrayList<ArrayList<String>>();
+	private ArrayList<ArrayList<String>> testResultsTable = new ArrayList<ArrayList<String>>();
+	private ArrayList<ReportLine> reportLines = new ArrayList<ReportLine>();
+	private ArrayList<ArrayList<String>> reportTable = new ArrayList<ArrayList<String>>();
+	private ArrayList<ArrayList<String>> reportHeaders = new  ArrayList<ArrayList<String>>();
 
 	private Properties properties;
 
@@ -46,9 +48,14 @@ public class Runner {
 
 		Runner runner = new Runner();
 		runner.getProperties();
-		runner.getTests();
-		runner.getTestStatuses();
-		runner.setTestResults();
+
+		runner.setTestDataTable();
+		runner.setTestResultsTable();
+		runner.setReportLines();
+
+		runner.setReportTable();
+		runner.setReportHeaders();
+
 		runner.createPieChart();
 		runner.createHTML();
 	}
@@ -76,114 +83,22 @@ public class Runner {
 		}
 	}
 
-	public void getTests() {
-		String csvFile = properties.getProperty("input.test_data_cvs_path");
-		BufferedReader br = null;
-		String line = "";
-		String cvsSplitBy = ",";
-		tests = new ArrayList<Test>();
-		try {
-			br = new BufferedReader(new FileReader(csvFile));
-			while ((line = br.readLine()) != null) {
-				String[] testRow = line.split(cvsSplitBy);
-				if (StringUtils.isNumeric(testRow[0])) {
-					Test test = new Test();
-					test.setNum(testRow[0]);
-					test.setSupplierId(testRow[1]);
-					test.setGender(testRow[2]);
-					test.setHealthClass(testRow[3]);
-					test.setTerm(testRow[4]);
-					test.setFaceAmount(testRow[5]);
-					test.setWaiver(testRow[6]);
-					test.setWaiverRating(testRow[7]);
-					test.setCr(testRow[8]);
-					test.setCru(testRow[9]);
-					test.setTermAccel(testRow[10]);
-					test.setLifeElements(testRow[11]);
-					test.setCommonTable(testRow[12]);
-					test.setFlatExtra(testRow[13]);
-					test.setFlatYears(testRow[14]);
-					test.setActualAge(testRow[15]);
-					test.setPaymentOption(testRow[16]);
-					test.setMode(testRow[17]);
-					test.setPremium(testRow[18]);
-					test.setState(testRow[19]);
-					tests.add(test);
-				}
-			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	public void getTestStatuses() {
-		String csvFile = properties.getProperty("input.test_results_cvs_path");
-		BufferedReader br = null;
-		String line = "";
-		String cvsSplitBy = ",";
-		testResults = new ArrayList<TestResult>();
-		try {
-			br = new BufferedReader(new FileReader(csvFile));
-			while ((line = br.readLine()) != null) {
-				String[] testStatusRow = line.split(cvsSplitBy);
-				if (StringUtils.isNumeric(testStatusRow[11]) && testStatusRow[2].contains("[TEST]")) {
-					String success = testStatusRow[7];
-					if (testStatusRow[4].equals("no_rates")) {
-						success = "n/a";
-					}
-					testResults.add(new TestResult(testStatusRow[2], testStatusRow[4], success));
-				}
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	public void setTestResults() {
-		if (tests.size() == testResults.size()) {
-			for (int i = 0; i < tests.size(); i++) {
-				tests.get(i).setStatus(testResults.get(i).getStatus());
-				tests.get(i).setActualResult(testResults.get(i).getResponseMessage());
-			}
-		} else {
-			System.out.println("Unexpected number of test statuses!");
-		}
-	}
-
 	public void createPieChart() {
 		long passed = 0;
 		long failed = 0;
 		long na = 0;
 		long zero = 0;
-		for (Test test : tests) {
-			if (test.getStatus() == null) {
+
+		int numberOfTests = reportLines.size() - 1;
+
+		for (int i = 1; i <= numberOfTests; i++) {
+			if (reportLines.get(i).getStatus() == null) {
 				zero += 1;
-			} else if (test.getStatus().equalsIgnoreCase("true")) {
+			} else if (reportLines.get(i).getStatus().equalsIgnoreCase("passed")) {
 				passed += 1;
-			} else if (test.getStatus().equalsIgnoreCase("false")) {
+			} else if (reportLines.get(i).getStatus().equalsIgnoreCase("failed")) {
 				failed += 1;
-			} else if (test.getStatus().equals("n/a")) {
+			} else if (reportLines.get(i).getStatus().equals("n/a")) {
 				na += 1;
 			}
 		}
@@ -193,10 +108,11 @@ public class Runner {
 		}
 
 		System.out.println("Results:");
-		System.out.println("Total " + tests.size() + " (" + Math.round(tests.size() * 100 / tests.size()) + "%)");
-		System.out.println("Passed " + passed + " (" + Math.round((double) passed * 100 / tests.size()) + "%)");
-		System.out.println("Failed: " + failed + " (" + Math.round((double) failed * 100 / tests.size()) + "%)");
-		System.out.println("N/A: " + na + " (" + Math.round((double) na * 100 / tests.size()) + "%)");
+
+		System.out.println("Total " + numberOfTests + " (" + Math.round(numberOfTests * 100 / numberOfTests) + "%)");
+		System.out.println("Passed " + passed + " (" + Math.round((double) passed * 100 / numberOfTests) + "%)");
+		System.out.println("Failed: " + failed + " (" + Math.round((double) failed * 100 / numberOfTests) + "%)");
+		System.out.println("N/A: " + na + " (" + Math.round((double) na * 100 / numberOfTests) + "%)");
 
 		DefaultPieDataset dataset = new DefaultPieDataset();
 		dataset.setValue("Passed", new Double(passed));
@@ -204,7 +120,7 @@ public class Runner {
 		dataset.setValue("N/A", new Double(na));
 
 		JFreeChart chart = ChartFactory.createPieChart("Test Results", // chart
-																		// title
+				// title
 				dataset, // data
 				true, // include legend
 				true, false);
@@ -250,8 +166,9 @@ public class Runner {
 			e.printStackTrace();
 		}
 
-		Map<String, ArrayList<Test>> input = new HashMap<String, ArrayList<Test>>();
-		input.put("tests", tests);
+		Map<String, ArrayList<ArrayList<String>>> input = new HashMap<String, ArrayList<ArrayList<String>>>();
+		input.put("headers", reportHeaders);
+		input.put("rows", reportTable);
 
 		Writer fileWriter = null;
 		try {
@@ -273,6 +190,131 @@ public class Runner {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public ArrayList<ArrayList<String>> getTableDataTable() {
+		return testDataTable;
+	}
+
+	private ArrayList<ArrayList<String>> getTable(String csvFile) {
+		BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+		ArrayList<ArrayList<String>> rows = new ArrayList<ArrayList<String>>();
+
+		try {
+			br = new BufferedReader(new FileReader(csvFile));
+
+			while ((line = br.readLine()) != null) {
+				ArrayList<String> row = new ArrayList<String>(Arrays.asList(line.split(cvsSplitBy)));
+				rows.add(row);
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return rows;
+	}
+
+	public void setTestDataTable() {
+		testDataTable.addAll(getTable(properties.getProperty("input.test_data_cvs_path")));
+	}
+
+	public ArrayList<ArrayList<String>> getTestResultsTable() {
+		return testResultsTable;
+	}
+
+	public void setTestResultsTable() {
+		testResultsTable.addAll(getTable(properties.getProperty("input.test_results_cvs_path")));
+	}
+
+	public ArrayList<ReportLine> getReportLines() {
+		return reportLines;
+	}
+
+	public void setReportLines() {
+		int num = testDataTable.get(0).indexOf("Num");
+		int premium = testDataTable.get(0).indexOf("premium");
+
+		for(int i = 0; i < testDataTable.size(); i++) {
+			ReportLine reportLine = new ReportLine();
+			ArrayList<String> apatheticData = new ArrayList<String>();
+			for(int j = 0; j < testDataTable.get(i).size(); j++) {
+
+				if(j == num) {
+					reportLine.setNum(testDataTable.get(i).get(j));
+				} else if(j == premium) {
+					reportLine.setPremium(testDataTable.get(i).get(j));
+				} else {
+					apatheticData.add(testDataTable.get(i).get(j));
+				}
+			}
+			reportLine.setApatheticData(apatheticData);
+			reportLines.add(reportLine);
+		}
+
+		int actualResult = testResultsTable.get(0).indexOf("responseMessage");
+		int label = testResultsTable.get(0).indexOf("label");
+
+
+		int testNumber = 0;
+
+		for(ArrayList<String> row : testResultsTable) {
+			if(row.get(label).contains("[TEST] Get Quote")) {
+				String actualResultValue = row.get(actualResult);
+				reportLines.get(testNumber + 1).setActualResult(actualResultValue);
+
+				if(reportLines.get(testNumber + 1).getActualResult().equals("no_rates")) {
+					reportLines.get(testNumber + 1).setStatus("n/a");
+				} else if(reportLines.get(testNumber + 1).getActualResult().equals("OK")) {
+					reportLines.get(testNumber + 1).setStatus("passed");
+				} else {
+					reportLines.get(testNumber + 1).setStatus("failed");
+				}
+				testNumber++;
+			}
+		}
+	}
+
+	public ArrayList<ArrayList<String>> getReportTable() {
+		return reportTable;
+	}
+
+	public void setReportTable() {		
+		for(int i = 1; i < reportLines.size(); i++) {
+			ArrayList<String> row = new ArrayList<String>(); 
+			row.add(reportLines.get(i).getNum());
+
+			for (String string : reportLines.get(i).getApatheticData()) {
+				row.add(string);
+			}
+			row.add(reportLines.get(i).getPremium());
+			row.add(reportLines.get(i).getActualResult());
+			row.add(reportLines.get(i).getStatus());
+			reportTable.add(row);
+		}
+	}
+
+	public void setReportHeaders() {
+		ArrayList<String> headers = new ArrayList<String>();
+		headers.add("Num");
+		for(String string : reportLines.get(0).getApatheticData()) {
+			headers.add(string);
+		}
+		headers.add("premium");
+		headers.add("actualResult");
+		headers.add("status");
+		reportHeaders.add(headers);
 	}
 
 }
