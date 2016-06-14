@@ -111,8 +111,8 @@ public class Runner {
 
 		System.out.println("Total " + numberOfTests + " (" + Math.round(numberOfTests * 100 / numberOfTests) + "%)");
 		System.out.println("Passed " + passed + " (" + Math.round((double) passed * 100 / numberOfTests) + "%)");
-		System.out.println("Failed: " + failed + " (" + Math.round((double) failed * 100 / numberOfTests) + "%)");
-		System.out.println("N/A: " + na + " (" + Math.round((double) na * 100 / numberOfTests) + "%)");
+		System.out.println("Failed " + failed + " (" + Math.round((double) failed * 100 / numberOfTests) + "%)");
+		System.out.println("N/A " + na + " (" + Math.round((double) na * 100 / numberOfTests) + "%)");
 
 		DefaultPieDataset dataset = new DefaultPieDataset();
 		dataset.setValue("Passed", new Double(passed));
