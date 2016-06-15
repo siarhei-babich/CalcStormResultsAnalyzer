@@ -1,4 +1,4 @@
-package com.ipepeline.calcstorm.analyzer;
+package com.ipipeline.calcstorm.analyzer;
 
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -25,7 +25,7 @@ import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
-import com.ipepeline.calcstorm.analyzer.bo.ReportLine;
+import com.ipipeline.calcstorm.analyzer.bo.ReportLine;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

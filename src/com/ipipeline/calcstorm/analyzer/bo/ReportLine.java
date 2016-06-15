@@ -1,4 +1,4 @@
-package com.ipepeline.analyzer.bo;
+package com.ipipeline.calcstorm.analyzer.bo;
 
 import java.util.ArrayList;
 
