@@ -263,22 +263,27 @@ public class Runner {
 			reportLines.add(reportLine);
 		}
 
-		int label = testResultsTable.get(0).indexOf(properties.getProperty("input.test_results_cvs.column.label"));
-		int actualResult = testResultsTable.get(0).indexOf(properties.getProperty("input.test_results_cvs.column.actualResult"));
+		int labelColumnIndex = testResultsTable.get(0).indexOf("label");
+		int actualResultColumnIndex = testResultsTable.get(0).indexOf("responseMessage");
+		int successColumnIndex = testResultsTable.get(0).indexOf("success");
 
 		int testNumber = 0;
 
 		for(ArrayList<String> row : testResultsTable) {
-			if(row.get(label).contains("[TEST] Get Quote")) {
-				String actualResultValue = row.get(actualResult);
+			if(row.get(labelColumnIndex).contains("[TEST] Get Quote")) {
+				String actualResultValue = row.get(actualResultColumnIndex);
+				String successValue = row.get(successColumnIndex);
 				reportLines.get(testNumber + 1).setActualResult(actualResultValue);
+				reportLines.get(testNumber + 1).setSuccess(successValue);
 
 				if(reportLines.get(testNumber + 1).getActualResult().equals("no_rates")) {
 					reportLines.get(testNumber + 1).setStatus("n/a");
 				} else if(reportLines.get(testNumber + 1).getActualResult().equals("OK")) {
 					reportLines.get(testNumber + 1).setStatus("passed");
-				} else {
+				} else if (reportLines.get(testNumber + 1).getSuccess().equalsIgnoreCase("false")) {
 					reportLines.get(testNumber + 1).setStatus("failed");
+				} else if (reportLines.get(testNumber + 1).getSuccess().equalsIgnoreCase("true")) {
+					reportLines.get(testNumber + 1).setStatus("passed");
 				}
 				testNumber++;
 			}

@@ -8,16 +8,18 @@ public class ReportLine {
 	private ArrayList<String> apatheticData = new ArrayList<String>();
 	private String premium;
 	private String actualResult;
+	private String success;
 	private String status;
 	
 	public ReportLine() {}
-	
-	public ReportLine(String num, ArrayList<String> apatheticData, String premium, String actualResult,
+
+	public ReportLine(String num, ArrayList<String> apatheticData, String premium, String actualResult, String success,
 			String status) {
 		this.num = num;
 		this.apatheticData = apatheticData;
 		this.premium = premium;
 		this.actualResult = actualResult;
+		this.success = success;
 		this.status = status;
 	}
 
@@ -53,6 +55,14 @@ public class ReportLine {
 		this.actualResult = actualResult;
 	}
 
+	public String getSuccess() {
+		return success;
+	}
+
+	public void setSuccess(String success) {
+		this.success = success;
+	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -64,7 +74,7 @@ public class ReportLine {
 	@Override
 	public String toString() {
 		return "ReportLine [num=" + num + ", apatheticData=" + apatheticData + ", premium=" + premium
-				+ ", actualResult=" + actualResult + ", status=" + status + "]";
+				+ ", actualResult=" + actualResult + ", success=" + success + ", status=" + status + "]";
 	}
 
 }
