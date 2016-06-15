@@ -192,10 +192,6 @@ public class Runner {
 		}
 	}
 
-	public ArrayList<ArrayList<String>> getTableDataTable() {
-		return testDataTable;
-	}
-
 	private ArrayList<ArrayList<String>> getTable(String csvFile) {
 		BufferedReader br = null;
 		String line = "";
@@ -206,7 +202,7 @@ public class Runner {
 			br = new BufferedReader(new FileReader(csvFile));
 
 			while ((line = br.readLine()) != null) {
-				ArrayList<String> row = new ArrayList<String>(Arrays.asList(line.split(cvsSplitBy)));
+				ArrayList<String> row = new ArrayList<String>(Arrays.asList(line.split(cvsSplitBy, -1)));
 				rows.add(row);
 			}
 
@@ -311,11 +307,11 @@ public class Runner {
 
 	public void setReportHeaders() {
 		ArrayList<String> headers = new ArrayList<String>();
-		headers.add("Num");
+		headers.add(properties.getProperty("input.test_data_cvs.column.num"));
 		for(String string : reportLines.get(0).getApatheticData()) {
 			headers.add(string);
 		}
-		headers.add("premium");
+		headers.add(properties.getProperty("input.test_data_cvs.column.premium"));
 		headers.add("actualResult");
 		headers.add("status");
 		reportHeaders.add(headers);
