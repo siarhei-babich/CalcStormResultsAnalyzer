@@ -1,4 +1,4 @@
-package com.ipepeline.analyzer;
+package com.ipepeline.calcstorm.analyzer;
 
 import java.awt.Color;
 import java.io.BufferedReader;
@@ -25,7 +25,7 @@ import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
 
-import com.ipepeline.analyzer.bo.ReportLine;
+import com.ipepeline.calcstorm.analyzer.bo.ReportLine;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -227,7 +227,7 @@ public class Runner {
 	}
 
 	public void setTestDataTable() {
-		testDataTable.addAll(getTable(properties.getProperty("input.test_data_cvs_path")));
+		testDataTable.addAll(getTable(properties.getProperty("input.test_data_cvs.path")));
 	}
 
 	public ArrayList<ArrayList<String>> getTestResultsTable() {
@@ -235,7 +235,7 @@ public class Runner {
 	}
 
 	public void setTestResultsTable() {
-		testResultsTable.addAll(getTable(properties.getProperty("input.test_results_cvs_path")));
+		testResultsTable.addAll(getTable(properties.getProperty("input.test_results_cvs.path")));
 	}
 
 	public ArrayList<ReportLine> getReportLines() {
@@ -243,8 +243,8 @@ public class Runner {
 	}
 
 	public void setReportLines() {
-		int num = testDataTable.get(0).indexOf("Num");
-		int premium = testDataTable.get(0).indexOf("premium");
+		int num = testDataTable.get(0).indexOf(properties.getProperty("input.test_data_cvs.column.num"));
+		int premium = testDataTable.get(0).indexOf(properties.getProperty("input.test_data_cvs.column.premium"));
 
 		for(int i = 0; i < testDataTable.size(); i++) {
 			ReportLine reportLine = new ReportLine();
@@ -263,9 +263,8 @@ public class Runner {
 			reportLines.add(reportLine);
 		}
 
-		int actualResult = testResultsTable.get(0).indexOf("responseMessage");
-		int label = testResultsTable.get(0).indexOf("label");
-
+		int label = testResultsTable.get(0).indexOf(properties.getProperty("input.test_results_cvs.column.label"));
+		int actualResult = testResultsTable.get(0).indexOf(properties.getProperty("input.test_results_cvs.column.actualResult"));
 
 		int testNumber = 0;
 
